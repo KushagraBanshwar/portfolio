@@ -528,6 +528,30 @@ document.addEventListener('mousemove', e => {
   requestAnimationFrame(animateRing);
 })();
 
+/* ── LOADER ─────────────────────────────────────────────────── */
+const loaderEl  = document.getElementById('loader');
+const loaderBar = document.querySelector('.loader-bar');
+
+let fakeProgress = 0;
+const fakeInterval = setInterval(() => {
+  const remaining = 85 - fakeProgress;
+  fakeProgress += remaining * 0.07 + 0.4;
+  if (fakeProgress >= 85) { fakeProgress = 85; clearInterval(fakeInterval); }
+  loaderBar.style.width = fakeProgress + '%';
+}, 80);
+
+function dismissLoader() {
+  clearInterval(fakeInterval);
+  loaderBar.style.width = '100%';
+  setTimeout(() => loaderEl.classList.add('hidden'), 350);
+}
+
+window.addEventListener('load', () => {
+  setTimeout(dismissLoader, 600);
+});
+
+setTimeout(dismissLoader, 6000);
+
 /* ── HERO ENTRANCE ──────────────────────────────────────── */
 window.addEventListener('load', () => {
   const eyebrow = document.getElementById('heroEyebrow');
@@ -537,7 +561,6 @@ window.addEventListener('load', () => {
   const scroll  = document.getElementById('heroScroll');
   const letters = document.querySelectorAll('#heroName .letter');
 
-  // Stagger letters
   setTimeout(() => {
     name.style.opacity = '1';
     letters.forEach((l, i) => {
@@ -598,8 +621,6 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 
 videos.forEach(video => observer.observe(video));
-
-
 
 /* ── SMOOTH PARALLAX ON HERO ────────────────────────────── */
 window.addEventListener('scroll', () => {
